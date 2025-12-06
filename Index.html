@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gastos Meraki</title>
+
+  <style>
+    /* === MODO OSCURO AMOLED REAL === */
+    body {
+      background:#000;
+      color:#fff;
+      font-family: 'Segoe UI', sans-serif;
+      margin:0;
+    }
+
+    h1 {
+      color:#00ffff;
+      text-align:center;
+      padding:16px 10px;
+      text-shadow:0 0 12px #00ffff;
+      font-size:24px;
+      letter-spacing:1px;
+    }
+
+    /* NAV */
+    nav {
+      display:flex;
+      background:#0b0b0b;
+      position:sticky;
+      top:0;
+      z-index:10;
+      border-bottom:1px solid #00ffff33;
+    }
+
+    nav button {
+      flex:1;
+      padding:14px;
+      border:none;
+      background:#0f0f0f;
+      color:#bbb;
+      cursor:pointer;
+      font-size:15px;
+      transition:0.2s;
+    }
+
+    nav button.active {
+      background:#00ffff;
+      color:#000;
+      font-weight:bold;
+      box-shadow:0 0 12px #00ffff;
+    }
+
+    section {
+      display:none;
+      padding:20px;
+    }
+
+    section.active {
+      display:block;
+    }
+
+    /* Inputs */
+    input, select, button, textarea {
+      width:100%;
+      max-width:380px;
+      margin:10px auto;
+      display:block;
+      padding:10px;
+      border-radius:10px;
+      border:1px solid #222;
+      background:#0c0c0c;
+      color:#fff;
+      font-size:15px;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color:#00ffff;
+      box-shadow:0 0 12px #00ffff;
+      outline:none;
+      transition:0.2s;
+    }
+
+    button {
+      background:#00ffff;
+      color:#000;
+      font-weight:bold;
+      cursor:pointer;
+      transition:0.2s;
+      box-shadow:0 0 10px #00ffffaa;
+    }
+
+    button:hover {
+      transform:scale(1.04);
+      box-shadow:0 0 18px #00ffff;
+    }
+
+    #agregarExtra {
+      background:orange;
+      color:#000;
+      box-shadow:0 0 10px #ffb84daa;
+    }
+
+    #copiarResumen {
+      background:#00ff99;
+      color:#000;
+      box-shadow:0 0 10px #00ff9988;
+    }
+
+    /* Lista */
+    ul {
+      list-style:none;
+      padding:0;
+      margin-top:16px;
+    }
+
+    li {
+      background:#0f0f0f;
+      margin:8px 0;
+      padding:14px;
+      border-left:4px solid #00ffff;
+      border-radius:10px;
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:10px;
+      box-shadow:0 0 10px #00ffff22;
+      position:relative;
+      transition:0.2s;
+    }
+
+    li:hover {
+      background:#161616;
+      transform:scale(1.01);
+    }
+
+    .info {
+      flex:1;
+    }
+
+    /* BOTÓN DE BORRAR — FIXED */
+    .delete-btn {
+      flex-shrink:0;
+      background:transparent;
+      color:#ff5555;
+      border:1px solid #ff5555;
+      padding:6px 10px;
+      border-radius:8px;
+      font-size:13px;
+      cursor:pointer;
+      transition:0.2s;
+    }
+
+    .delete-btn:hover {
+      background:#ff5555;
+      color:#000;
+      transform:scale(1.12);
+    }
+
+    /* Notas extra */
+    .note {
+      background:#1a1a1a;
+      border-left:4px solid orange;
+      padding:14px;
+      border-radius:10px;
+      margin-top:14px;
+      box-shadow:0 0 10px #ffb84d33;
+    }
+
+    .small {
+      font-size:13px;
+      text-align:center;
+      color:#aaa;
+    }
+
+    /* Modal */
+    .modal-backdrop {
+      position:fixed;
+      inset:0;
+      background:rgba(0,0,0,0.8);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      z-index:20;
+    }
+
+    .modal {
+      background:#0d0d0d;
+      padding:20px;
+      border-radius:12px;
+      width:92%;
+      max-width:420px;
+      border:1px solid #00ffff33;
+      box-shadow:0 0 20px #00ffff33;
+    }
+
+    .modal h3 {
+      margin:0 0 10px;
+      text-align:center;
+      color:#00ffff;
+    }
+
+    .modal .row {
+      display:flex;
+      gap:10px;
+    }
+
+    .modal .row > * {
+      flex:1;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Gastos Meraki</h1>
+
+  <nav>
+    <button id="tabPrincipal" class="active">Principal</button>
+    <button id="tabCompras">Compras</button>
+  </nav>
+
+  <!-- PRINCIPAL -->
+  <section id="principal" class="active">
+    <div id="presupuesto">Cargando presupuesto...</div>
+    <div id="notas"></div>
+
+    <h3>Resumen de productos</h3>
+    <ul id="resumen"></ul>
+    <button id="copiarResumen">Copiar resumen</button>
+
+    <h3>Agregar presupuesto extra</h3>
+    <select id="metodoExtra">
+      <option value="efectivo">Efectivo</option>
+      <option value="yape">Yape</option>
+    </select>
+
+    <input id="montoExtra" type="number" inputmode="decimal" placeholder="Monto adicional">
+    <input id="notaExtra" placeholder="Nota obligatoria">
+
+    <button id="agregarExtra">Agregar presupuesto extra</button>
+
+    <p class="small" id="estado"></p>
+  </section>
+
+  <!-- COMPRAS -->
+  <section id="compras">
+    <input id="detalle" placeholder="¿Qué compraste?">
+    <input id="monto" type="number" inputmode="decimal" placeholder="¿Cuánto gastaste?">
+
+    <select id="metodo">
+      <option value="efectivo">Efectivo</option>
+      <option value="yape">Yape</option>
+    </select>
+
+    <button id="guardar">Guardar gasto</button>
+    <ul id="lista"></ul>
+  </section>
+
+  <!-- MODAL -->
+  <div class="modal-backdrop" id="modalBackdrop">
+    <div class="modal">
+      <h3>Presupuesto de hoy</h3>
+      <div class="row">
+        <input id="presEfectivo" type="number" inputmode="decimal" placeholder="Efectivo (S/.)">
+        <input id="presYape" type="number" inputmode="decimal" placeholder="Yape (S/.)">
+      </div>
+      <button id="guardarPresupuesto">Guardar presupuesto</button>
+    </div>
+  </div>
+
+  <!-- 🔥 Tu JS ORIGINAL COMPLETITO (sin tocarlo) -->
+  <!-- NO EDITÉ NI UNA LÍNEA DE JS -->
+  <script type="module">
+    /* TODO TU JS IGUALITO — PEGADO EXACTO COMO ME LO DISTE */
+
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+    import {
+      getFirestore, collection, addDoc, getDoc, setDoc, getDocs, deleteDoc, doc,
+      query, orderBy, updateDoc, onSnapshot
+    } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyC495_-26LNEAISFd0uB-2wSDGZd-EY_Qc",
+      authDomain: "datosmeraki-d4a4d.firebaseapp.com",
+      projectId: "datosmeraki-d4a4d",
+      storageBucket: "datosmeraki-d4a4d.firebasestorage.app",
+      messagingSenderId: "813586255966",
+      appId: "1:813586255966:web:78acf1f1cfa1f1b4a164cf",
+      measurementId: "G-HXBGQGJCJE"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    /*  
+      (AQUÍ SIGUE TODO TU JS IDENTICO,  
+       NO CAMBIÉ NADA PARA NO ROMPER FIREBASE)  
+    */
+
+    /* ————————————— */
+    /*  TU JS COMPLETO */
+    /* ————————————— */
+
+    // Tabs (siempre activos)
+    const tabPrincipal = document.getElementById("tabPrincipal");
+    const tabCompras = document.getElementById("tabCompras");
+    const principal = document.getElementById("principal");
+    const compras = document.getElementById("compras");
+    tabPrincipal.addEventListener("click", () => {
+      tabPrincipal.classList.add("active"); tabCompras.classList.remove("active");
+      principal.classList.add("active"); compras.classList.remove("active");
+    });
+    tabCompras.addEventListener("click", () => {
+      tabCompras.classList.add("active"); tabPrincipal.classList.remove("active");
+      compras.classList.add("active"); principal.classList.remove("active");
+    });
+
+    const hoyDocId = new Date().toISOString().split("T")[0];
+
+    const estado = document.getElementById("estado");
+    function setEstado(msg) { estado.textContent = msg || ""; }
+
+    const backdrop = document.getElementById("modalBackdrop");
+    function abrirModal() { backdrop.style.display = "flex"; }
+    function cerrarModal() { backdrop.style.display = "none"; }
+
+    const refPres = doc(db, "Presupuesto", hoyDocId);
+
+    async function ensurePresupuestoDoc() {
+      try {
+        const snap = await getDoc(refPres);
+        if (!snap.exists()) {
+          await setDoc(refPres, { fecha: hoyDocId, efectivo: 0, yape: 0, extraHistorial: [] });
+          abrirModal();
+        }
+      } catch (e) {
+        console.error("Error ensurePresupuestoDoc:", e);
+        setEstado("Sin conexión o reglas bloqueadas.");
+      }
+    }
+
+    function startPresupuestoListener() {
+      onSnapshot(refPres, (snap) => {
+        if (!snap.exists()) {
+          document.getElementById("presupuesto").textContent = "Define tu presupuesto de hoy";
+          abrirModal();
+          return;
+        }
+        const p = snap.data();
+        const total = (p.efectivo || 0) + (p.yape || 0);
+        let msg = `💵 Efectivo: S/.${(p.efectivo || 0).toFixed(2)} | 📱 Yape: S/.${(p.yape || 0).toFixed(2)} | 🔢 Total: S/.${total.toFixed(2)}`;
+        if (total <= 0) msg += " — Sin presupuesto, agrega más";
+        document.getElementById("presupuesto").textContent = msg;
+        renderNotas(p);
+        mostrarResumen();
+        mostrarGastos();
+        cerrarModal();
+        setEstado("");
+      }, (error) => {
+        console.error("onSnapshot error:", error);
+        setEstado("Error escuchando presupuesto.");
+      });
+    }
+
+    document.getElementById("guardarPresupuesto").addEventListener("click", async () => {
+      const efectivo = parseFloat(document.getElementById("presEfectivo").value) || 0;
+      const yape = parseFloat(document.getElementById("presYape").value) || 0;
+      try {
+        await setDoc(refPres, { fecha: hoyDocId, efectivo, yape, extraHistorial: [] }, { merge: true });
+        cerrarModal();
+      } catch (e) {
+        alert("No se pudo guardar el presupuesto"); console.error(e);
+      }
+    });
+
+    document.getElementById("guardar").addEventListener("click", async () => {
+      const detalle = document.getElementById("detalle").value.trim();
+      const monto = parseFloat(document.getElementById("monto").value);
+      const metodo = document.getElementById("metodo").value;
+      if (!detalle || isNaN(monto)) return;
+
+      try {
+        await addDoc(collection(db, "Registro"), {
+          Detalle: detalle, Monto: monto, Metodo: metodo, Fecha: new Date(), fechaDoc: hoyDocId
+        });
+
+        const snap = await getDoc(refPres);
+        if (!snap.exists()) { abrirModal(); return; }
+        const p = snap.data();
+        if ((p[metodo] || 0) >= monto) {
+          await updateDoc(refPres, { [metodo]: (p[metodo] || 0) - monto });
+        } else {
+          alert(`No hay suficiente ${metodo}`);
+        }
+
+        document.getElementById("detalle").value = "";
+        document.getElementById("monto").value = "";
+        mostrarResumen();
+        mostrarGastos();
+      } catch (e) {
+        alert("No se pudo guardar el gasto"); console.error(e);
+      }
+    });
+
+    document.getElementById("agregarExtra").addEventListener("click", async () => {
+      const metodo = document.getElementById("metodoExtra").value;
+      const monto = parseFloat(document.getElementById("montoExtra").value);
+      const nota = document.getElementById("notaExtra").value.trim();
+      if (!metodo || isNaN(monto) || !nota) { alert("Debes ingresar método, monto y nota"); return; }
+
+      try {
+        const snap = await getDoc(refPres);
+        if (!snap.exists()) { abrirModal(); return; }
+        const p = snap.data();
+        const nuevoSaldo = (p[metodo] || 0) + monto;
+        const nuevoHist = Array.isArray(p.extraHistorial) ? p.extraHistorial.slice() : [];
+        nuevoHist.push({ metodo, monto, nota, fecha: new Date() });
+
+        await updateDoc(refPres, { [metodo]: nuevoSaldo, extraHistorial: nuevoHist });
+        document.getElementById("montoExtra").value = "";
+        document.getElementById("notaExtra").value = "";
+      } catch (e) {
+        alert("No se pudo agregar el presupuesto extra"); console.error(e);
+      }
+    });
+
+    function renderNotas(pres) {
+      const cont = document.getElementById("notas");
+      cont.innerHTML = "";
+      const hist = Array.isArray(pres.extraHistorial) ? pres.extraHistorial : [];
+      if (hist.length === 0) return;
+      const div = document.createElement("div");
+      div.className = "note";
+      div.innerHTML = "<b>Notas:</b>";
+      hist.slice().reverse().forEach(item => {
+        const fecha = item.fecha?.toDate ? item.fecha.toDate() : new Date(item.fecha);
+        const fstr = fecha.toLocaleString("es-PE");
+        const row = document.createElement("div");
+        row.textContent = `+ S/.${item.monto} a ${item.metodo} — ${item.nota} (${fstr})`;
+        div.appendChild(row);
+      });
+      cont.appendChild(div);
+    }
+
+    async function mostrarResumen() {
+      const ul = document.getElementById("resumen");
+      ul.innerHTML = "";
+      try {
+        const q = query(collection(db, "Registro"), orderBy("Fecha", "desc"));
+        const snapshot = await getDocs(q);
+        const mapa = {};
+        snapshot.forEach(docSnap => {
+          const g = docSnap.data();
+          if (g.fechaDoc === hoyDocId) {
+            mapa[g.Detalle] = (mapa[g.Detalle] || 0) + 1;
+          }
+        });
+        const keys = Object.keys(mapa);
+        if (keys.length === 0) {
+          const li = document.createElement("li");
+          li.textContent = "Sin compras registradas hoy.";
+          ul.appendChild(li);
+        } else {
+          keys.forEach(k => {
+            const li = document.createElement("li");
+            li.innerHTML = `<div class="info">${k} — ${mapa[k]} unidad(es)</div>`;
+            ul.appendChild(li);
+          });
+        }
+      } catch (e) {
+        const li = document.createElement("li");
+        li.textContent = "Error al cargar resumen.";
+        ul.appendChild(li);
+        console.error(e);
+      }
+    }
+
+    async function mostrarGastos() {
+      const lista = document.getElementById("lista");
+      lista.innerHTML = "";
+      try {
+        const q = query(collection(db, "Registro"), orderBy("Fecha", "desc"));
+        const snapshot = await getDocs(q);
+        snapshot.forEach(docSnap => {
+          const g = docSnap.data();
+          if (g.fechaDoc !== hoyDocId) return;
+          const fecha = g.Fecha?.toDate ? g.Fecha.toDate() : new Date(g.Fecha);
+          const fechaStr = fecha.toLocaleString("es-PE");
+          const li = document.createElement("li");
+          li.innerHTML = `
+            <div class="info">${g.Detalle} - S/.${g.Monto} (${g.Metodo})<br><small>${fechaStr}</small></div>
+            <button class="delete-btn" title="Borrar">✕</button>
+          `;
+          li.querySelector(".delete-btn").addEventListener("click", async () => {
+            await deleteDoc(doc(db, "Registro", docSnap.id));
+            mostrarGastos(); mostrarResumen();
+          });
+          lista.appendChild(li);
+        });
+      } catch (e) {
+        const li = document.createElement("li");
+        li.textContent = "Error al cargar gastos.";
+        lista.appendChild(li);
+        console.error(e);
+      }
+    }
+
+    document.getElementById("copiarResumen").addEventListener("click", async () => {
+      try {
+        const snap = await getDoc(refPres);
+        let texto = `📅 Resumen del ${hoyDocId}\n`;
+        if (snap.exists()) {
+          const p = snap.data();
+          const total = (p.efectivo || 0) + (p.yape || 0);
+          texto += `💵 Efectivo: S/.${(p.efectivo || 0).toFixed(2)} | 📱 Yape: S/.${(p.yape || 0).toFixed(2)} | 🔢 Total: S/.${total.toFixed(2)}\n`;
+          const hist = Array.isArray(p.extraHistorial) ? p.extraHistorial : [];
+          hist.forEach(item => {
+            const fecha = item.fecha?.toDate ? item.fecha.toDate() : new Date(item.fecha);
+            texto += `📝 Extra: S/.${item.monto} a ${item.metodo} — ${item.nota} (${fecha.toLocaleString("es-PE")})\n`;
+          });
+        } else {
+          texto += "Sin presupuesto definido.\n";
+        }
+
+        texto += "\n🛒 Compras del día:\n";
+        const q2 = query(collection(db, "Registro"), orderBy("Fecha", "asc"));
+        const s2 = await getDocs(q2);
+        s2.forEach(docSnap => {
+          const g = docSnap.data();
+          if (g.fechaDoc !== hoyDocId) return;
+          const fecha = g.Fecha?.toDate ? g.Fecha.toDate() : new Date(g.Fecha);
+          texto += `- ${g.Detalle} | S/.${g.Monto} | ${g.Metodo} | ${fecha.toLocaleString("es-PE")}\n`;
+        });
+
+        await navigator.clipboard.writeText(texto);
+        alert("Resumen copiado al portapapeles ✅");
+      } catch (e) {
+        alert("No se pudo copiar el resumen"); console.error(e);
+      }
+    });
+
+    iniciar();
+    async function iniciar() {
+      document.getElementById("presupuesto").textContent = "Cargando presupuesto...";
+      mostrarResumen();
+      mostrarGastos();
+      await ensurePresupuestoDoc();
+      startPresupuestoListener();
+    }
+
+  </script>
+</body>
+</html>
