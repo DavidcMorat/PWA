@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
- <h1>MerakiAPP</h1>
+<title>MerakiAPP - Gestor de Gastos</title>
 
 <style>
-/* --- AMOLED STYLE --- */
+/* --- AMOLED STYLE OPTIMIZADO --- */
 
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;800&display=swap');
 
@@ -15,262 +15,444 @@ body {
   background: #000;
   color: #fff;
   margin: 0;
+  padding: 0;
   font-family: 'Poppins', sans-serif;
+  overflow-x: hidden;
 }
 
-/* Título */
-.app-title {
-  font-size: 2.2rem;
+/* Header y título */
+#appTitle {
   text-align: center;
-  margin: 20px 0 10px;
-  background: linear-gradient(90deg, #00D4FF, #7F00FF);
+  font-size: 28px;
+  margin: 15px 0 5px;
+  font-weight: 900;
+  letter-spacing: 1.5px;
+  background: linear-gradient(120deg, #00FFFF, #9b00ff, #00FFFF);
+  background-size: 200% 200%;
+  animation: titleGlow 5s ease infinite;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  letter-spacing: 2px;
-  animation: fadeIn 1s ease-in-out;
+  padding: 0 10px;
 }
 
-/* Tabs */
+@keyframes titleGlow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Tabs mejorados */
 .tabs {
   display: flex;
   justify-content: space-around;
   background: #090909;
-  border-bottom: 1px solid #111;
+  border-bottom: 1px solid #222;
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
 
 .tab {
-  width: 33%;
-  padding: 12px;
+  flex: 1;
+  padding: 14px 5px;
   text-align: center;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 15px;
   color: #aaa;
-  transition: background 0.3s, color 0.3s;
+  transition: all 0.3s;
+  border-bottom: 3px solid transparent;
 }
 
 .tab.active {
-  background: #111;
   color: #fff;
+  border-bottom: 3px solid #0066FF;
+  background: linear-gradient(to bottom, rgba(0,102,255,0.1), transparent);
 }
 
-/* Vistas */
+/* Vistas optimizadas */
 .view {
   display: none;
-  padding: 20px;
-  animation: fadeIn 0.4s ease;
+  padding: 15px;
+  animation: fadeIn 0.3s ease;
+  max-width: 600px;
+  margin: 0 auto;
 }
 
 .view.active {
   display: block;
 }
 
-/* Inputs */
-input, textarea, select {
-  width: 100%;
-  margin-top: 12px;
-  padding: 12px;
-  border-radius: 12px;
-  border: none;
-  background: #0b0b0b;
-  color: white;
-  font-size: 16px;
-  outline: none;
-  border: 1px solid #1a1a1a;
+/* SECCIÓN HOME - Reorganizada */
+
+/* Saldos en tarjetas */
+.saldos-container {
+  display: flex;
+  gap: 10px;
+  margin: 15px 0;
 }
 
-/* Botones AMOLED */
-button {
-  width: 100%;
-  padding: 14px;
-  margin-top: 15px;
+.saldo-card {
+  flex: 1;
+  background: #0b0b0b;
+  border: 1px solid #222;
+  border-radius: 14px;
+  padding: 15px;
+  text-align: center;
+}
+
+.saldo-label {
+  font-size: 14px;
+  color: #aaa;
+  margin-bottom: 5px;
+}
+
+.saldo-valor {
+  font-size: 22px;
+  font-weight: 800;
+  color: #00FFFF;
+}
+
+/* Acciones principales */
+.acciones-principales {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 20px 0;
+}
+
+.btn-primary {
+  background: linear-gradient(120deg, #0066FF, #AA00FF);
+  padding: 16px;
   border-radius: 14px;
   border: none;
   color: white;
   font-size: 16px;
   font-weight: 600;
-  background: linear-gradient(135deg, #0000FF, #00FFFF);
   cursor: pointer;
-  transition: transform 0.15s ease, opacity 0.2s;
+  transition: transform 0.2s, opacity 0.2s;
 }
 
-/* 🤍 Glow blanco al presionar */
-button:active {
-  outline: none;
-  box-shadow:
-    0 0 12px rgba(255, 255, 255, 0.9),
-    0 0 25px rgba(255, 255, 255, 0.8),
-    0 0 40px rgba(255, 255, 255, 0.6);
-  transform: scale(0.96);
-}
-
-/* 🤍 Glow suave al pasar el dedo encima (hover para táctil también) */
-button:hover,
-button:focus-visible {
-  box-shadow:
-    0 0 10px rgba(255, 255, 255, 0.7),
-    0 0 20px rgba(255, 255, 255, 0.5);
+.btn-primary:hover {
+  transform: scale(1.02);
   opacity: 0.95;
 }
 
-button:hover {
-  transform: scale(1.05);
-  opacity: 0.9;
+.btn-secondary {
+  background: #222;
+  padding: 14px;
+  border-radius: 12px;
+  border: none;
+  color: white;
+  font-size: 15px;
+  cursor: pointer;
+  transition: background 0.2s;
 }
 
-/* Tarjetas para listas */
+.btn-secondary:hover {
+  background: #333;
+}
+
+.btn-danger {
+  background: linear-gradient(120deg, #ff3333, #990000);
+  padding: 14px;
+  border-radius: 12px;
+  border: none;
+  color: white;
+  font-size: 15px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+/* Formulario agregar presupuesto */
+.form-presupuesto {
+  background: #0b0b0b;
+  border: 1px solid #222;
+  border-radius: 16px;
+  padding: 15px;
+  margin: 15px 0;
+}
+
+.form-presupuesto h3 {
+  margin-top: 0;
+  color: #aaa;
+}
+
+.input-group {
+  margin-bottom: 12px;
+}
+
+.input-group label {
+  display: block;
+  margin-bottom: 5px;
+  color: #ccc;
+  font-size: 14px;
+}
+
+.input-group input,
+.input-group select,
+.input-group textarea {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid #333;
+  background: #000;
+  color: white;
+  font-size: 15px;
+  box-sizing: border-box;
+}
+
+/* Sección administración */
+.seccion-admin {
+  margin-top: 25px;
+  padding-top: 15px;
+  border-top: 1px solid #222;
+}
+
+.seccion-admin h3 {
+  color: #aaa;
+  margin-bottom: 10px;
+}
+
+/* SECCIÓN GASTOS */
+.productos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 10px;
+  margin: 15px 0;
+}
+
+.producto-card {
+  background: #0d0d0d;
+  padding: 12px;
+  border-radius: 14px;
+  text-align: center;
+  border: 1px solid #222;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.producto-card:hover {
+  transform: scale(1.03);
+  border-color: #555;
+}
+
+.card-actions {
+  margin-top: 8px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.btn-mini {
+  background: #222;
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 12px;
+  border: none;
+  color: white;
+  cursor: pointer;
+}
+
+/* SECCIÓN REGISTRO */
+.acciones-registro {
+  display: flex;
+  gap: 10px;
+  margin: 15px 0;
+}
+
+#listaRegistro {
+  margin-top: 15px;
+}
+
 .item {
   background: #0b0b0b;
-  border: 1px solid #1a1a1a;
-  padding: 15px;
-  border-radius: 16px;
-  margin-top: 12px;
-  font-size: 16px;
+  border: 1px solid #222;
+  padding: 12px;
+  border-radius: 12px;
+  margin-top: 8px;
+  font-size: 14px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  animation: fadeInUp 0.35s ease;
 }
 
-/* Números grandes */
-.big-number {
-  font-size: 2.4rem;
-  font-weight: 800;
-  text-align: center;
-  margin-top: 10px;
-  color: #00C6FF;
+.delete-btn {
+  background: #222;
+  border: 1px solid #333;
+  color: #fff;
+  padding: 6px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 12px;
 }
 
 /* Animaciones */
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to   { opacity: 1; }
-}
-
-@keyframes fadeInUp {
   from { opacity: 0; transform: translateY(10px); }
-  to   { opacity: 1; transform: translateY(0); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-/* Quita el resaltado azul feo al tocar en Android/Chrome */
+/* Responsive */
+@media (max-width: 480px) {
+  .saldos-container {
+    flex-direction: column;
+  }
+  
+  .productos-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .acciones-registro {
+    flex-direction: column;
+  }
+}
+
+/* Quita el resaltado azul feo al tocar */
 * {
   -webkit-tap-highlight-color: transparent;
 }
-
-/* Quita el borde cuando haces focus en los botones */
-button:focus,
-a:focus {
-  outline: none !important;
-  box-shadow: none !important;
-}
-
-.delete-btn {
-  background: #111;
-  border: 1px solid #333;
-  color: #fff;
-  font-size: 1.2rem;
-  padding: 8px;
-  width: 44px;
-  height: 44px;
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.delete-btn:hover {
-  background: #1a1a1a;
-  transform: scale(1.05);
-}
-
-.delete-btn:active {
-  transform: scale(0.95);
-}
-
 </style>
 </head>
 
 <body>
+  <h1 id="appTitle">MerakiAPP</h1>
 
-<header>Gastos Meraki</header>
+  <div class="tabs">
+    <div class="tab active" data-target="home">🏠 Inicio</div>
+    <div class="tab" data-target="gastos">💰 Gastos</div>
+    <div class="tab" data-target="registro">📋 Registro</div>
+  </div>
 
-<div class="tabs">
-  <div class="tab active" data-target="home">Inicio</div>
-  <div class="tab" data-target="gastos">Gastos</div>
-  <div class="tab" data-target="registro">Registro</div>
-</div>
+  <!-- PESTAÑA INICIO - Reorganizada -->
+  <div class="view active" id="home">
+    <!-- Saldos visibles -->
+    <div class="saldos-container">
+      <div class="saldo-card">
+        <div class="saldo-label">Total</div>
+        <div class="saldo-valor" id="totalPresupuesto">0</div>
+      </div>
+      <div class="saldo-card">
+        <div class="saldo-label">Efectivo</div>
+        <div class="saldo-valor" id="efectivoPresupuesto">0</div>
+      </div>
+      <div class="saldo-card">
+        <div class="saldo-label">Yape</div>
+        <div class="saldo-valor" id="yapePresupuesto">0</div>
+      </div>
+    </div>
 
-<!-- HOME -->
-<div class="view active" id="home">
-  <h2>Presupuesto actual</h2>
+    <!-- ACCIONES PRINCIPALES (arriba, fácil acceso) -->
+    <div class="acciones-principales">
+      <button class="btn-primary" id="btnAgregarPresupuesto">
+        ➕ Agregar Presupuesto
+      </button>
+      <button class="btn-secondary" id="btnBorrarGastos">
+        🗑️ Borrar TODOS los gastos
+      </button>
+    </div>
 
-  <div class="big-number" id="totalPresupuesto">0</div>
+    <!-- Formulario para agregar presupuesto (inicialmente oculto) -->
+    <div class="form-presupuesto" id="formAgregarPresupuesto" style="display: none;">
+      <h3>Agregar presupuesto</h3>
+      <div class="input-group">
+        <label>Monto a agregar</label>
+        <input type="number" id="montoAgregar" placeholder="Ej: 100" />
+      </div>
+      
+      <div class="input-group">
+        <label>Tipo</label>
+        <select id="tipoMonto">
+          <option value="efectivo">Efectivo</option>
+          <option value="yape">Yape</option>
+          <option value="general">General</option>
+        </select>
+      </div>
+      
+      <div class="input-group">
+        <label>Nota (opcional)</label>
+        <textarea id="notaPresupuesto" placeholder="Ej: Pago del trabajo" rows="2"></textarea>
+      </div>
+      
+      <button class="btn-primary" id="btnConfirmarAgregar">Confirmar</button>
+      <button class="btn-secondary" id="btnCancelarAgregar">Cancelar</button>
+    </div>
 
-  <p>Efectivo:</p>
-  <div class="big-number" id="efectivoPresupuesto">0</div>
+    <!-- Sección Administración (más abajo, menos accesible) -->
+    <div class="seccion-admin">
+      <h3>Administración</h3>
+      <button class="btn-danger" id="btnBorrarRegistro">
+        🗑️ Borrar TODO el registro
+      </button>
+      <button class="btn-danger" id="btnBorrarTodosGastos">
+        🔥 Borrar TODOS los gastos
+      </button>
+      <button class="btn-danger" id="btnResetPresupuesto">
+        🔄 Restablecer presupuesto
+      </button>
+    </div>
+  </div>
 
-  <p>Yape:</p>
-  <div class="big-number" id="yapePresupuesto">0</div>
+  <!-- PESTAÑA GASTOS -->
+  <div class="view" id="gastos">
+    <h2>Registrar gasto</h2>
 
-  <h3>Agregar presupuesto</h3>
+    <h3>Productos frecuentes</h3>
+    <div id="productosFrecuentes" class="productos-grid"></div>
 
-  <input type="number" id="montoAgregar" placeholder="Monto a agregar" />
+    <div class="acciones-principales">
+      <button class="btn-primary" id="btnNuevoProducto">➕ Agregar nuevo producto</button>
+      <button class="btn-secondary" id="btnOtroProducto">📝 Otro producto</button>
+    </div>
 
-  <select id="tipoMonto">
-    <option value="efectivo">Efectivo</option>
-    <option value="yape">Yape</option>
-    <option value="general">General</option>
-  </select>
+    <!-- Inputs manuales para gastos -->
+    <div id="inputsManual" style="display:none; margin-top:20px;">
+      <div class="form-presupuesto">
+        <div class="input-group">
+          <label>Nombre del producto</label>
+          <input type="text" id="gastoNombre" placeholder="Ej: Café" />
+        </div>
+        
+        <div class="input-group">
+          <label>Precio</label>
+          <input type="number" id="gastoPrecio" placeholder="Ej: 12.50" />
+        </div>
+        
+        <div class="input-group">
+          <label>Método de pago</label>
+          <select id="metodoPago">
+            <option value="efectivo">Efectivo</option>
+            <option value="yape">Yape</option>
+            <option value="general">General</option>
+          </select>
+        </div>
+        
+        <button class="btn-primary" id="btnGuardarGasto">💾 Guardar gasto</button>
+        <button class="btn-secondary" id="btnCancelarGasto">Cancelar</button>
+      </div>
+    </div>
+  </div>
 
-  <textarea id="notaPresupuesto" placeholder="Nota (opcional al agregar)"></textarea>
-
-  <button id="btnAgregarPresupuesto">Agregar</button>
-  
-  <button id="btnBorrarGastos">Borrar TODOS los gastos</button>
-<button id="btnBorrarRegistro">Borrar TODO el registro</button>
-<button id="btnResetPresupuesto">Restablecer presupuesto</button>
-
-<button id="copiarResumenBtn" class="btn-amoled">📋 Copiar resumen</button>
-
-</div>
-
-
-<!-- GASTOS -->
-<div class="view" id="gastos">
-  <h2>Registrar gasto</h2>
-
-  <input type="text" id="gastoNombre" placeholder="Nombre del producto" />
-  <input type="number" id="gastoPrecio" placeholder="Precio" />
-
-  <select id="metodoPago">
-    <option value="efectivo">Efectivo</option>
-    <option value="yape">Yape</option>
-    <option value="general">General</option>
-  </select>
-
-  <button id="btnGuardarGasto">Guardar gasto</button>
-
-  <h3>Gastos registrados</h3>
-  <div id="listaGastos"></div>
-</div>
-
-<!-- REGISTRO -->
-<div class="view" id="registro">
-  <h2>Registro de eventos</h2>
-  <div id="listaRegistro"></div>
-</div>
+  <!-- PESTAÑA REGISTRO -->
+  <div class="view" id="registro">
+    <h2>📋 Registro de eventos</h2>
+    
+    <!-- Acciones específicas del registro -->
+    <div class="acciones-registro">
+      <button class="btn-primary" id="copiarResumenBtn">📋 Copiar resumen del DÍA</button>
+      <!-- Botón Exportar ELIMINADO como pediste -->
+    </div>
+    
+    <div id="listaRegistro"></div>
+  </div>
 
 <script type="module">
-
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-analytics.js";
-
 import {
   getFirestore, doc, getDoc, updateDoc, setDoc,
   addDoc, collection, deleteDoc, onSnapshot,
-  getDocs, writeBatch
+  getDocs, writeBatch, query, where
 } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
+
 const firebaseConfig = {
   apiKey: "AIzaSyC495_-26LNEAISFd0uB-2wSDGZd-EY_Qc",
   authDomain: "datosmeraki-d4a4d.firebaseapp.com",
@@ -283,21 +465,30 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-
 const presupuestoRef = doc(db, "Presupuesto", "actual");
 
-/* ================= TABS (sin tocar) ================= */
+/* ================= NAVEGACIÓN ENTRE PESTAÑAS ================= */
 document.querySelectorAll(".tab").forEach(tab => {
   tab.addEventListener("click", () => {
     document.querySelector(".tab.active").classList.remove("active");
     tab.classList.add("active");
-
     document.querySelector(".view.active").classList.remove("active");
     document.getElementById(tab.dataset.target).classList.add("active");
   });
 });
 
-/* ================ asegurar doc presupuesto ================ */
+/* ================ GESTIÓN DEL FORMULARIO AGREGAR PRESUPUESTO ================ */
+document.getElementById("btnAgregarPresupuesto").addEventListener("click", () => {
+  document.getElementById("formAgregarPresupuesto").style.display = "block";
+});
+
+document.getElementById("btnCancelarAgregar").addEventListener("click", () => {
+  document.getElementById("formAgregarPresupuesto").style.display = "none";
+  document.getElementById("montoAgregar").value = "";
+  document.getElementById("notaPresupuesto").value = "";
+});
+
+/* ================ INICIALIZAR PRESUPUESTO ================ */
 async function ensurePresupuesto() {
   const snap = await getDoc(presupuestoRef);
   if (!snap.exists()) {
@@ -311,22 +502,25 @@ async function ensurePresupuesto() {
 }
 ensurePresupuesto();
 
-/* ================ PRESUPUESTO en vivo ================ */
+/* ================ ACTUALIZAR SALDOS EN TIEMPO REAL ================ */
 onSnapshot(presupuestoRef, snap => {
   if (!snap.exists()) return;
   const d = snap.data();
-  document.getElementById("totalPresupuesto").textContent = d.total ?? 0;
-  document.getElementById("efectivoPresupuesto").textContent = d.efectivo ?? 0;
-  document.getElementById("yapePresupuesto").textContent = d.yape ?? 0;
+  document.getElementById("totalPresupuesto").textContent = d.total?.toFixed(2) || "0.00";
+  document.getElementById("efectivoPresupuesto").textContent = d.efectivo?.toFixed(2) || "0.00";
+  document.getElementById("yapePresupuesto").textContent = d.yape?.toFixed(2) || "0.00";
 });
 
-/* ================ AGREGAR PRESUPUESTO (extra) ================ */
-document.getElementById("btnAgregarPresupuesto").addEventListener("click", async () => {
+/* ================ AGREGAR PRESUPUESTO - CORREGIDO PARA "GENERAL" ================ */
+document.getElementById("btnConfirmarAgregar").addEventListener("click", async () => {
   const monto = Number(document.getElementById("montoAgregar").value);
   const tipo = document.getElementById("tipoMonto").value;
   const nota = document.getElementById("notaPresupuesto").value || "";
 
-  if (!monto || monto <= 0) return alert("Monto inválido bro");
+  if (!monto || monto <= 0) {
+    alert("Por favor ingresa un monto válido");
+    return;
+  }
 
   const snap = await getDoc(presupuestoRef);
   const data = snap.data();
@@ -335,8 +529,17 @@ document.getElementById("btnAgregarPresupuesto").addEventListener("click", async
   let nuevoEfectivo = data.efectivo || 0;
   let nuevoYape = data.yape || 0;
 
-  if (tipo === "efectivo") nuevoEfectivo += monto;
-  else if (tipo === "yape") nuevoYape += monto;
+  // CORRECCIÓN: Si es "general", se distribuye entre efectivo y yape
+  if (tipo === "efectivo") {
+    nuevoEfectivo += monto;
+  } else if (tipo === "yape") {
+    nuevoYape += monto;
+  } else if (tipo === "general") {
+    // Dividir el monto entre efectivo y yape (50% cada uno)
+    const mitad = monto / 2;
+    nuevoEfectivo += mitad;
+    nuevoYape += mitad;
+  }
 
   await updateDoc(presupuestoRef, {
     total: nuevoTotal,
@@ -345,54 +548,139 @@ document.getElementById("btnAgregarPresupuesto").addEventListener("click", async
     notas: nota
   });
 
-  // registro solo al agregar presupuesto (como querías)
+  // Registrar evento
   await addDoc(collection(db, "Registro"), {
-    mensaje: `Agregaste S/ ${monto} a ${tipo}`,
-    fecha: new Date()
+    mensaje: `✅ Agregaste S/ ${monto.toFixed(2)} a ${tipo === "general" ? "General (distribuido en efectivo y yape)" : tipo}` + (nota ? ` (${nota})` : ""),
+    fecha: new Date(),
+    tipo: "presupuesto_agregado"
   });
 
-  // limpiar inputs
+  // Limpiar y ocultar formulario
   document.getElementById("montoAgregar").value = "";
   document.getElementById("notaPresupuesto").value = "";
+  document.getElementById("formAgregarPresupuesto").style.display = "none";
+  
+  alert(`✅ Presupuesto actualizado! +S/ ${monto.toFixed(2)}`);
 });
 
-/* ================ GUARDAR GASTO (AHORA RESTA PRESUPUESTO) ================ */
+/* ================ PRODUCTOS FRECUENTES ================ */
+const productosRef = collection(db, "Productos");
+const contenedor = document.getElementById("productosFrecuentes");
+const inputsManual = document.getElementById("inputsManual");
+
+// Mostrar/ocultar inputs manuales
+document.getElementById("btnOtroProducto").addEventListener("click", () => {
+  inputsManual.style.display = "block";
+  document.getElementById("gastoNombre").value = "";
+  document.getElementById("gastoPrecio").value = "";
+});
+
+document.getElementById("btnCancelarGasto").addEventListener("click", () => {
+  inputsManual.style.display = "none";
+  document.getElementById("gastoNombre").value = "";
+  document.getElementById("gastoPrecio").value = "";
+});
+
+// Cargar productos
+onSnapshot(productosRef, snap => {
+  contenedor.innerHTML = "";
+
+  snap.forEach(docu => {
+    const p = docu.data();
+    const card = document.createElement("div");
+    card.className = "producto-card";
+    card.innerHTML = `
+      <div style="font-size:16px; font-weight:600;">${p.nombre}</div>
+      <div class="card-actions">
+        <button class="btn-mini" data-editar="${docu.id}">✏️</button>
+        <button class="btn-mini" data-borrar="${docu.id}">🗑️</button>
+      </div>
+    `;
+
+    // Seleccionar producto para gasto
+    card.addEventListener("click", (e) => {
+      if (e.target.tagName === 'BUTTON') return;
+      inputsManual.style.display = "block";
+      document.getElementById("gastoNombre").value = p.nombre;
+      document.getElementById("gastoPrecio").value = "";
+      document.getElementById("gastoPrecio").focus();
+    });
+
+    contenedor.appendChild(card);
+  });
+
+  // Botones de borrar
+  document.querySelectorAll("[data-borrar]").forEach(btn => {
+    btn.addEventListener("click", async (e) => {
+      e.stopPropagation();
+      if (confirm("¿Borrar este producto?")) {
+        await deleteDoc(doc(db, "Productos", btn.dataset.borrar));
+      }
+    });
+  });
+
+  // Botones de editar
+  document.querySelectorAll("[data-editar]").forEach(btn => {
+    btn.addEventListener("click", async (e) => {
+      e.stopPropagation();
+      const nuevoNombre = prompt("Nuevo nombre del producto:");
+      if (nuevoNombre && nuevoNombre.trim()) {
+        await updateDoc(doc(db, "Productos", btn.dataset.editar), { 
+          nombre: nuevoNombre.trim() 
+        });
+      }
+    });
+  });
+});
+
+// Agregar nuevo producto
+document.getElementById("btnNuevoProducto").addEventListener("click", async () => {
+  const nombre = prompt("Nombre del nuevo producto:");
+  if (nombre && nombre.trim()) {
+    await addDoc(productosRef, { nombre: nombre.trim() });
+  }
+});
+
+/* ================ GUARDAR GASTO - CORREGIDO PARA "GENERAL" ================ */
 document.getElementById("btnGuardarGasto").addEventListener("click", async () => {
   const nombre = document.getElementById("gastoNombre").value.trim();
   const precio = Number(document.getElementById("gastoPrecio").value);
   const metodo = document.getElementById("metodoPago").value;
 
-  if (!nombre || !precio || precio <= 0) return alert("Bro llena todo bien");
-
-  // obtener presupuesto actual
-  const snap = await getDoc(presupuestoRef);
-  if (!snap.exists()) return alert("Presupuesto no existe");
-
-  const data = snap.data();
-  const saldoMetodo = (metodo === "efectivo") ? (data.efectivo || 0)
-                    : (metodo === "yape") ? (data.yape || 0)
-                    : (data.total || 0); // general usa total si quieres
-
-  // si quieres bloquear gasto si no hay saldo suficiente:
-  if (saldoMetodo < precio) {
-    return alert(`No hay suficiente ${metodo}. Saldo: S/ ${saldoMetodo}`);
+  if (!nombre || !precio || precio <= 0) {
+    alert("Por favor completa todos los campos correctamente");
+    return;
   }
 
-  // 1) Guardar gasto
-  const gastoRef = await addDoc(collection(db, "Gastos"), {
-    nombre,
-    precio,
-    metodo,
-    fecha: new Date()
-  });
+  // Verificar saldo
+  const snap = await getDoc(presupuestoRef);
+  if (!snap.exists()) return alert("Error al obtener presupuesto");
 
-  // 2) Actualizar presupuesto restando el precio
+  const data = snap.data();
+  const saldoMetodo = metodo === "efectivo" ? data.efectivo 
+                     : metodo === "yape" ? data.yape 
+                     : data.total; // Para "general" usa el total
+
+  if (saldoMetodo < precio) {
+    alert(`❌ Saldo insuficiente en ${metodo}. Disponible: S/ ${saldoMetodo.toFixed(2)}`);
+    return;
+  }
+
+  // Actualizar presupuesto
   const nuevoTotal = (data.total || 0) - precio;
   let nuevoEfectivo = data.efectivo || 0;
   let nuevoYape = data.yape || 0;
 
-  if (metodo === "efectivo") nuevoEfectivo -= precio;
-  else if (metodo === "yape") nuevoYape -= precio;
+  if (metodo === "efectivo") {
+    nuevoEfectivo -= precio;
+  } else if (metodo === "yape") {
+    nuevoYape -= precio;
+  } else if (metodo === "general") {
+    // Para "general", restar mitad de cada uno
+    const mitad = precio / 2;
+    nuevoEfectivo -= mitad;
+    nuevoYape -= mitad;
+  }
 
   await updateDoc(presupuestoRef, {
     total: nuevoTotal,
@@ -400,123 +688,159 @@ document.getElementById("btnGuardarGasto").addEventListener("click", async () =>
     yape: nuevoYape
   });
 
-  // 3) Opcional: agregar registro del gasto
-  await addDoc(collection(db, "Registro"), {
-    mensaje: `Gastaste S/ ${precio} en ${nombre} (${metodo})`,
+  // Guardar gasto
+  await addDoc(collection(db, "Gastos"), {
+    nombre,
+    precio,
+    metodo,
     fecha: new Date()
   });
 
-  // limpiar inputs
+  // Registrar evento
+  await addDoc(collection(db, "Registro"), {
+    mensaje: `🛒 Gastaste S/ ${precio.toFixed(2)} en ${nombre} (${metodo})`,
+    fecha: new Date(),
+    tipo: "gasto_registrado"
+  });
+
+  // Limpiar y ocultar
   document.getElementById("gastoNombre").value = "";
   document.getElementById("gastoPrecio").value = "";
+  inputsManual.style.display = "none";
+  
+  alert(`✅ Gasto registrado! -S/ ${precio.toFixed(2)}`);
 });
 
-/* ================ LISTA GASTOS EN VIVO (y borrar devuelve dinero) ================ */
-onSnapshot(collection(db, "Gastos"), snap => {
-  const cont = document.getElementById("listaGastos");
-  cont.innerHTML = "";
-
-  snap.forEach(docu => {
-    const d = docu.data();
-    const id = docu.id;
-
-    const box = document.createElement("div");
-    box.className = "item";
-    box.innerHTML = `
-      <span>${d.nombre} — S/ ${d.precio}</span>
-      <button class="delete-btn" data-id="${doc.id}">🗑️</button>
-    `;
-    cont.appendChild(box);
-  });
-
-  // attach listeners (re-attach safe)
-  document.querySelectorAll(".delGasto").forEach(btn => {
-    btn.onclick = async () => {
-      const id = btn.dataset.id;
-      // obtener documento gasto para conocer precio y metodo
-      const gastoSnap = await getDoc(doc(db, "Gastos", id));
-      if (!gastoSnap.exists()) {
-        // si no existe, borrar igual
-        await deleteDoc(doc(db, "Gastos", id));
-        return;
-      }
-      const gasto = gastoSnap.data();
-      const precio = Number(gasto.precio || 0);
-      const metodo = gasto.metodo;
-
-      // 1) eliminar el gasto
-      await deleteDoc(doc(db, "Gastos", id));
-
-      // 2) devolver dinero al presupuesto (sumar)
-      const presSnap = await getDoc(presupuestoRef);
-      if (!presSnap.exists()) return;
-      const p = presSnap.data();
-
-      const nuevoTotal = (p.total || 0) + precio;
-      let nuevoEfectivo = p.efectivo || 0;
-      let nuevoYape = p.yape || 0;
-
-      if (metodo === "efectivo") nuevoEfectivo += precio;
-      else if (metodo === "yape") nuevoYape += precio;
-
-      await updateDoc(presupuestoRef, {
-        total: nuevoTotal,
-        efectivo: nuevoEfectivo,
-        yape: nuevoYape
-      });
-
-      // 3) registrar evento
-      await addDoc(collection(db, "Registro"), {
-        mensaje: `Eliminaste gasto ${gasto.nombre}, se devolvieron S/ ${precio} a ${metodo}`,
-        fecha: new Date()
-         });
-    };
-  });
+/* ================ BORRAR REGISTRO ================ */
+document.getElementById("btnBorrarRegistro").addEventListener("click", async () => {
+  if (!confirm("⚠️ ¿ESTÁS 100% SEGURO? Esto borrará PERMANENTEMENTE TODO el registro de eventos.")) return;
+  
+  try {
+    const btn = document.getElementById("btnBorrarRegistro");
+    const originalText = btn.textContent;
+    btn.textContent = "🔄 Borrando...";
+    btn.disabled = true;
+    
+    const registroRef = collection(db, "Registro");
+    const snapshot = await getDocs(registroRef);
+    
+    if (snapshot.empty) {
+      alert("✅ El registro ya está vacío");
+      btn.textContent = originalText;
+      btn.disabled = false;
+      return;
+    }
+    
+    console.log(`📊 Documentos a borrar: ${snapshot.size}`);
+    
+    const batch = writeBatch(db);
+    let contador = 0;
+    
+    snapshot.forEach((docu) => {
+      batch.delete(docu.ref);
+      contador++;
+    });
+    
+    await batch.commit();
+    
+    console.log(`✅ Borrados ${contador} documentos de Firestore`);
+    
+    const cont = document.getElementById("listaRegistro");
+    cont.innerHTML = '<div class="item" style="text-align: center; color: #aaa; padding: 20px;">📭 Registro vacío</div>';
+    
+    await addDoc(collection(db, "Registro"), {
+      mensaje: "🧹 Registro limpiado completamente por el usuario",
+      fecha: new Date(),
+      tipo: "admin_limpieza"
+    });
+    
+    alert(`✅ ¡BORRADO EXITOSO!\nSe eliminaron ${contador} registros de Firestore.`);
+    
+  } catch (error) {
+    console.error("❌ Error crítico al borrar registro:", error);
+    alert(`❌ ERROR: No se pudo borrar el registro.\n\nDetalles: ${error.message}`);
+  } finally {
+    const btn = document.getElementById("btnBorrarRegistro");
+    btn.textContent = "🗑️ Borrar TODO el registro";
+    btn.disabled = false;
+  }
 });
 
-/* ================ LISTA REGISTRO EN VIVO ================ */
-onSnapshot(collection(db, "Registro"), snap => {
-  const cont = document.getElementById("listaRegistro");
-  cont.innerHTML = "";
-
-  snap.forEach(docu => {
-    const d = docu.data();
-    const div = document.createElement("div");
-    div.className = "item";
-    div.innerHTML = `<span>${d.mensaje || "sin mensaje"}</span>`;
-    cont.appendChild(div);
-  });
+/* ================ BORRAR TODOS LOS GASTOS ================ */
+document.getElementById("btnBorrarTodosGastos").addEventListener("click", async () => {
+  if (!confirm("⚠️ ¿BORRAR TODOS LOS GASTOS PERMANENTEMENTE?\n\nEsto incluye todos los meses y años.\nSe perderán todos los datos históricos de gastos.")) return;
+  
+  try {
+    const btn = document.getElementById("btnBorrarTodosGastos");
+    const originalText = btn.textContent;
+    btn.textContent = "🔥 Borrando...";
+    btn.disabled = true;
+    
+    const gastosRef = collection(db, "Gastos");
+    const snapshot = await getDocs(gastosRef);
+    
+    if (snapshot.empty) {
+      alert("✅ No hay gastos para borrar");
+      btn.textContent = originalText;
+      btn.disabled = false;
+      return;
+    }
+    
+    console.log(`📊 Gastos a borrar: ${snapshot.size}`);
+    
+    const batch = writeBatch(db);
+    let contador = 0;
+    
+    snapshot.forEach((docu) => {
+      batch.delete(docu.ref);
+      contador++;
+    });
+    
+    await batch.commit();
+    
+    console.log(`✅ Borrados ${contador} gastos de Firestore`);
+    
+    await addDoc(collection(db, "Registro"), {
+      mensaje: `🔥 Se borraron TODOS los gastos (${contador} registros)`,
+      fecha: new Date(),
+      tipo: "admin_limpieza_total"
+    });
+    
+    alert(`✅ ¡TODOS LOS GASTOS BORRADOS!\nSe eliminaron ${contador} gastos de Firestore.\n\nAhora el resumen diario estará vacío.`);
+    
+  } catch (error) {
+    console.error("Error al borrar gastos:", error);
+    alert("❌ Error: " + error.message);
+  } finally {
+    const btn = document.getElementById("btnBorrarTodosGastos");
+    btn.textContent = "🔥 Borrar TODOS los gastos";
+    btn.disabled = false;
+  }
 });
 
+/* ================ BORRAR GASTOS ================ */
 document.getElementById("btnBorrarGastos").addEventListener("click", async () => {
-  if (!confirm("¿estas seguro? Esto borra TODOS los gastos.")) return;
+  if (!confirm("⚠️ ¿Borrar TODOS los gastos del sistema?")) return;
 
-  const ref = collection(db, "Gastos");
-  const snap = await getDocs(ref);
-
+  const gastosRef = collection(db, "Gastos");
+  const snap = await getDocs(gastosRef);
   const batch = writeBatch(db);
+  
   snap.forEach(docu => batch.delete(docu.ref));
   await batch.commit();
 
   await addDoc(collection(db, "Registro"), {
-    mensaje: "Se borraron todos los gastos",
-    fecha: new Date()
+    mensaje: "🧹 Se borraron TODOS los gastos",
+    fecha: new Date(),
+    tipo: "admin"
   });
+  
+  alert("✅ Todos los gastos han sido eliminados de Firestore");
 });
 
-document.getElementById("btnBorrarRegistro").addEventListener("click", async () => {
-  if (!confirm("¿Seguro? esto borra TODO el registro.")) return;
-
-  const ref = collection(db, "Registro");
-  const snap = await getDocs(ref);
-
-  const batch = writeBatch(db);
-  snap.forEach(docu => batch.delete(docu.ref));
-  await batch.commit();
-});
-
+/* ================ RESTABLECER PRESUPUESTO ================ */
 document.getElementById("btnResetPresupuesto").addEventListener("click", async () => {
-  if (!confirm("¿Deseas restablecer el presupuesto completo?")) return;
+  if (!confirm("⚠️ ¿Restablecer presupuesto a cero? Esta acción no se puede deshacer.")) return;
 
   await updateDoc(presupuestoRef, {
     total: 0,
@@ -526,49 +850,150 @@ document.getElementById("btnResetPresupuesto").addEventListener("click", async (
   });
 
   await addDoc(collection(db, "Registro"), {
-    mensaje: "Presupuesto restablecido",
-    fecha: new Date()
+    mensaje: "🔄 Presupuesto restablecido a cero",
+    fecha: new Date(),
+    tipo: "admin"
   });
-
-  cargarPresupuesto();
+  
+  alert("✅ Presupuesto restablecido a S/ 0.00 en Firestore");
 });
 
-// COPIAR RESUMEN (DEL MES)
+/* ================ REGISTRO EN TIEMPO REAL ================ */
+onSnapshot(collection(db, "Registro"), snap => {
+  const cont = document.getElementById("listaRegistro");
+  
+  if (snap.empty) {
+    cont.innerHTML = '<div class="item" style="text-align: center; color: #aaa; padding: 20px;">📭 Registro vacío</div>';
+    return;
+  }
+  
+  cont.innerHTML = "";
+  const registros = [];
+  
+  snap.forEach(docu => {
+    registros.push({ id: docu.id, ...docu.data() });
+  });
+  
+  registros.sort((a, b) => {
+    const fechaA = a.fecha?.toDate ? a.fecha.toDate() : new Date(a.fecha || 0);
+    const fechaB = b.fecha?.toDate ? b.fecha.toDate() : new Date(b.fecha || 0);
+    return fechaB - fechaA;
+  });
+  
+  registros.forEach(d => {
+    const div = document.createElement("div");
+    div.className = "item";
+    
+    const fecha = d.fecha?.toDate ? d.fecha.toDate() : new Date(d.fecha || 0);
+    const fechaStr = fecha.toLocaleString();
+    
+    div.innerHTML = `
+      <div>
+        <div style="font-size: 13px; color: #aaa;">${fechaStr}</div>
+        <div>${d.mensaje || "Sin mensaje"}</div>
+      </div>
+    `;
+    cont.appendChild(div);
+  });
+});
+
+/* ================ COPIAR RESUMEN DEL DÍA - FUNCIÓN MODIFICADA ================ */
 document.getElementById("copiarResumenBtn").addEventListener("click", async () => {
   try {
-    const month = new Date().getMonth() + 1;
-    const year = new Date().getFullYear();
-
-    const q = await getDocs(collection(db, "gastos"));
+    const btn = document.getElementById("copiarResumenBtn");
+    const originalText = btn.textContent;
+    btn.textContent = "🔄 Generando...";
+    btn.disabled = true;
+    
+    const hoy = new Date();
+    const dia = hoy.getDate();
+    const month = hoy.getMonth() + 1;
+    const year = hoy.getFullYear();
+    const fechaHoyStr = hoy.toLocaleDateString();
+    
+    const q = await getDocs(collection(db, "Gastos"));
     let total = 0;
     let lista = "";
-
+    let conteo = 0;
+    const gastosHoy = [];
+    
     q.forEach(doc => {
       const data = doc.data();
-      const fecha = new Date(data.fecha);
-
-      if (fecha.getMonth() + 1 === month && fecha.getFullYear() === year) {
-        total += parseFloat(data.monto || 0);
-        lista += `• ${data.producto}: S/ ${data.monto}\n`;
+      let fecha;
+      
+      if (data.fecha && data.fecha.toDate) {
+        fecha = data.fecha.toDate();
+      } else if (data.fecha && data.fecha.seconds) {
+        fecha = new Date(data.fecha.seconds * 1000);
+      } else if (data.fecha) {
+        fecha = new Date(data.fecha);
+      } else {
+        fecha = new Date();
+      }
+      
+      // Filtrar por DÍA ACTUAL (no mes completo)
+      if (fecha.getDate() === dia && 
+          fecha.getMonth() + 1 === month && 
+          fecha.getFullYear() === year) {
+        const precio = parseFloat(data.precio || 0);
+        total += precio;
+        conteo++;
+        gastosHoy.push({
+          nombre: data.nombre || "Sin nombre",
+          precio: precio,
+          metodo: data.metodo || "general",
+          fecha: fecha
+        });
       }
     });
-
+    
+    gastosHoy.sort((a, b) => b.fecha - a.fecha);
+    
+    gastosHoy.forEach(gasto => {
+      const horaStr = gasto.fecha.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      lista += `• ${gasto.nombre}: S/ ${gasto.precio.toFixed(2)} (${gasto.metodo}) - ${horaStr}\n`;
+    });
+    
     const resumen = 
-`📅 Resumen de ${month}/${year}
-Total gastado: S/ ${total.toFixed(2)}
+`📊 RESUMEN DEL DÍA - MerakiAPP
+📅 Fecha: ${fechaHoyStr}
+⏰ Generado: ${hoy.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
 
-Productos:
-${lista}`;
+💰 Total gastado hoy: S/ ${total.toFixed(2)}
+🔢 Cantidad de gastos: ${conteo}
 
+${conteo > 0 ? '🛒 Gastos de hoy:\n' + lista : '✅ No hay gastos registrados hoy'}
+
+💡 Puedes borrar el registro para tenerlo limpio.
+
+--- Fin del resumen del día ---`;
+    
     await navigator.clipboard.writeText(resumen);
-    alert("Resumen copiado 🟦✨");
-  } catch (e) {
-    alert("Uff bro algo falló 😭");
-    console.error(e);
+    
+    // Mostrar mensaje con la sugerencia de borrar
+    btn.textContent = "✅ ¡Copiado!";
+    setTimeout(() => {
+      btn.textContent = originalText;
+      btn.disabled = false;
+    }, 2000);
+    
+    // Mostrar alerta con el mensaje solicitado
+    alert(`✅ Resumen del día copiado al portapapeles!\n\n💡 Puedes borrar el registro para tenerlo limpio.`);
+    
+    console.log("=== RESUMEN DEL DÍA GENERADO ===");
+    console.log("Fecha:", fechaHoyStr);
+    console.log("Gastos hoy:", conteo);
+    console.log("Total hoy:", total);
+    
+  } catch (error) {
+    console.error("Error al copiar resumen:", error);
+    alert("❌ Error: " + error.message);
+    
+    const btn = document.getElementById("copiarResumenBtn");
+    btn.textContent = "📋 Copiar resumen del DÍA";
+    btn.disabled = false;
   }
 });
 </script>
-  
-
 </body>
 </html>
