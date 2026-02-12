@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mini PWA</title>
+  <link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#111111">
+<link rel="apple-touch-icon" href="192.png">
+
+  <!-- Manifest -->
+  <link rel="manifest" href="manifest.json">
+
+  <!-- Color de la app -->
+  <meta name="theme-color" content="#111111">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: system-ui, sans-serif;
+      background: #111;
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      text-align: center;
+    }
+    button {
+      margin-top: 20px;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 10px;
+      background: #00ffcc;
+      font-size: 16px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <div>
+    <h1>🚀 Mini PWA</h1>
+    <p>Hecha desde Acode, con flow.</p>
+    <button onclick="alert('PWA activada 😎')">Tocar</button>
+  </div>
+
+  <script>
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("sw.js")
+        .then(() => console.log("SW listo 🔥"))
+        .catch(err => console.log("Error SW", err));
+    }
+  </script>
+
+</body>
+</html>
