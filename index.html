@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>✨ San Valentín ✨</title>
+    <style>
+        /* (Mantén aquí todo el estilo CSS de la versión anterior) */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            background: #1a0b14;
+            background-image: radial-gradient(circle at 20% 30%, #ffd5f0 1px, transparent 1px),
+                              radial-gradient(circle at 80% 70%, #d9b0ff 1px, transparent 1px);
+            background-size: 40px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Segoe UI', 'Helvetica Neue', cursive, sans-serif;
+            padding: 16px;
+        }
+
+        .story-card {
+            background-color: #ffffff;
+            width: 100%;
+            max-width: 750px;
+            border-radius: 60px 60px 50px 50px;
+            box-shadow: 0 30px 50px -15px #ffb7d2, 0 0 0 4px #ffe6f0 inset;
+            position: relative;
+            overflow: hidden;
+            padding: 32px 24px 45px 24px;
+            border: 3px solid #ffe2f0;
+        }
+
+        .heart-bg {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.6;
+            background-image: 
+                radial-gradient(circle at 10% 20%, #ff99cc 8px, transparent 9px),
+                radial-gradient(circle at 95% 45%, #c28aff 11px, transparent 12px),
+                radial-gradient(circle at 40% 75%, #ffb3e6 7px, transparent 8px),
+                radial-gradient(circle at 70% 15%, #b57bee 13px, transparent 14px),
+                radial-gradient(circle at 85% 85%, #ffa0d0 9px, transparent 10px),
+                radial-gradient(circle at 25% 50%, #e5b2ff 15px, transparent 16px),
+                radial-gradient(circle at 55% 30%, #ffb5dd 10px, transparent 11px);
+            background-size: 250px 250px;
+            animation: floatHearts 16s infinite alternate ease-in-out;
+            filter: drop-shadow(0 0 6px #ffbede);
+        }
+
+        @keyframes floatHearts {
+            0% { background-position: 0% 0%; opacity: 0.5; }
+            50% { background-position: 5% 5%; opacity: 0.8; }
+            100% { background-position: 10% 10%; opacity: 0.6; }
+        }
+
+        .story-card::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(145deg, #ffe3f320, #ffeef820);
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .content {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+
+        .scene {
+            display: none;
+            width: 100%;
+            flex-direction: column;
+            align-items: center;
+            gap: 25px;
+            animation: fadeScene 0.6s ease;
+        }
+
+        .scene.active {
+            display: flex;
+        }
+
+        @keyframes fadeScene {
+            0% { opacity: 0.3; transform: translateY(12px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        .scene-img {
+            width: 280px;
+            height: 280px;
+            object-fit: cover;
+            border-radius: 50px 20px 50px 20px;
+            box-shadow: 0 25px 30px -12px #d680b0, 0 0 0 6px white, 0 0 0 10px #fad1e8;
+            transition: transform 0.4s;
+            background: #ffeef5;
+        }
+
+        .scene-img:hover {
+            transform: scale(1.02) rotate(1deg);
+        }
+
+        .mensaje {
+            background: #fceefff2;
+            backdrop-filter: blur(6px);
+            padding: 18px 35px;
+            border-radius: 60px 60px 60px 20px;
+            font-size: 2rem;
+            font-weight: 600;
+            color: #511c4d;
+            text-align: center;
+            line-height: 1.3;
+            border: 5px solid #ffcee9;
+            box-shadow: 0 12px 0 #f5a9cc;
+            max-width: 500px;
+            font-family: 'Trebuchet MS', cursive, sans-serif;
+        }
+
+        .mensaje span {
+            font-size: 2.3rem;
+            filter: drop-shadow(0 2px 5px #feb0d4);
+        }
+
+        .btn-continuar, .btn-playlist {
+            background: linear-gradient(145deg, #ca74d4, #f58fc0);
+            border: none;
+            border-radius: 60px;
+            padding: 16px 48px;
+            font-size: 2rem;
+            font-weight: 600;
+            color: white;
+            text-shadow: 0 2px 5px #a23d87;
+            box-shadow: 0 15px 25px -8px #d68fc2, 0 6px 0 0 #904a7a;
+            cursor: pointer;
+            transition: 0.12s;
+            border: 3px solid #ffe1f1;
+            letter-spacing: 1.8px;
+            margin: 10px 0;
+            font-family: inherit;
+            -webkit-tap-highlight-color: transparent;
+            outline: none;
+        }
+
+        .btn-continuar:focus, .btn-playlist:focus {
+            outline: none;
+            box-shadow: 0 15px 25px -8px #d68fc2, 0 6px 0 0 #904a7a;
+        }
+
+        .btn-continuar:focus-visible, .btn-playlist:focus-visible {
+            outline: 3px solid #ffa0d0;
+        }
+
+        .btn-continuar:hover, .btn-playlist:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 22px 30px -6px #c482b2, 0 8px 0 0 #904a7a;
+        }
+
+        .btn-continuar:active, .btn-playlist:active {
+            transform: translateY(6px);
+            box-shadow: 0 8px 15px -6px #b477a3, 0 1px 0 0 #904a7a;
+        }
+
+        .mini-indicador {
+            color: #c08dae;
+            font-size: 1.2rem;
+            margin: -5px 0 5px;
+            font-weight: 300;
+        }
+
+        .reproductor-oculto {
+            width: 100%;
+            margin-top: 30px;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            gap: 25px;
+            background: #fff2fb;
+            padding: 30px 20px;
+            border-radius: 80px 20px 80px 20px;
+            border: 5px dashed #f7a8cf;
+            box-shadow: 0 20px 30px #eab3d0;
+        }
+
+        .reproductor-oculto.mostrar {
+            display: flex;
+            animation: aparecer 0.5s;
+        }
+
+        @keyframes aparecer {
+            0% { opacity: 0; transform: scale(0.9); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        .reproductor-oculto p {
+            font-size: 2rem;
+            color: #912d78;
+            font-weight: 600;
+            text-shadow: 2px 2px 0 #ffd5ea;
+        }
+
+        .playlist {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .playlist-item {
+            background: white;
+            border-radius: 50px;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            box-shadow: 0 6px 0 #e7acc9, 0 10px 20px #facfeb;
+            border: 3px solid #fec6e3;
+        }
+
+        .playlist-item .cancion-numero {
+            background: #de93c7;
+            color: white;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 30px;
+            font-weight: bold;
+            font-size: 1.4rem;
+            box-shadow: inset -2px -2px 0 #b35f9b;
+        }
+
+        .playlist-item .cancion-info {
+            flex: 1;
+            font-size: 1.3rem;
+            font-weight: 500;
+            color: #3f1e3b;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .playlist-item audio {
+            max-width: 170px;
+            height: 40px;
+            border-radius: 30px;
+            outline: none;
+        }
+
+        @media (max-width: 550px) {
+            .story-card { padding: 20px 12px 30px; }
+            .scene-img { width: 220px; height: 220px; }
+            .mensaje { font-size: 1.6rem; padding: 15px 20px; }
+            .btn-continuar, .btn-playlist { font-size: 1.7rem; padding: 12px 30px; }
+            .playlist-item { flex-wrap: wrap; justify-content: center; }
+            .playlist-item audio { max-width: 100%; }
+        }
+    </style>
+</head>
+<body>
+    <div class="story-card">
+        <div class="heart-bg"></div>
+        <div class="content">
+
+            <!-- ESCENA 1 -->
+            <div id="scene1" class="scene active">
+                <img class="scene-img" src="https://i.pinimg.com/564x/67/e3/f5/67e3f50355510e59d2ac644a0c6f88b2.jpg" alt="corazón romántico" loading="lazy">
+                <div class="mensaje"><span>💜</span>  Cada día te amo más, te pienso cada momento y te adoro.  <span>💜</span></div>
+                <button class="btn-continuar" id="toScene2">continuar 🌸</button>
+                <div class="mini-indicador">1/4</div>
+            </div>
+
+            <!-- ESCENA 2 -->
+            <div id="scene2" class="scene">
+                <img class="scene-img" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQURSrjHIamgkf1YWp1YZe2lDU7fkpVpgp_n08acn1mENYGED4WWFDAy90O&s=10" alt="dulce abrazo" loading="lazy">
+                <div class="mensaje"><span>💖</span>  contigo el tiempo vuela, quisiera que un segundo sea una vida.. con gusto la viviré contigo amor <span>💖</span></div>
+                <button class="btn-continuar" id="toScene3">continuar 🌼</button>
+                <div class="mini-indicador">2/4</div>
+            </div>
+
+            <!-- ESCENA 3 -->
+            <div id="scene3" class="scene">
+                <img class="scene-img" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTWK6SdxHP6cqKCpa-HJrShOLDbUYu4Yc1-Px94JI3nuZZ5ZYHtMq50fvs&s=10" alt="osito enamorado" loading="lazy">
+                <div class="mensaje"><span>💗</span>  gracias por tantas sonrisas  <span>💗</span></div>
+                <button class="btn-continuar" id="toScene4">continuar 🌺</button>
+                <div class="mini-indicador">3/4</div>
+            </div>
+
+            <!-- ESCENA 4 (última con la nueva imagen y el reproductor) -->
+            <div id="scene4" class="scene">
+                <img class="scene-img" src="https://thumbs.dreamstime.com/b/te-amo-fondo-negro-y-rojo-espa%C3%B1ol-o-portugu%C3%A9s-del-d%C3%ADa-de-tarjetas-del-d%C3%ADa-de-san-valent%C3%ADn-de-las-letras-de-felicitaci%C3%B3n-de-84027249.jpg" alt="te amo fondo rojo" loading="lazy">
+                <div class="mensaje"><span>💘</span>  siempre juntos, ese es mi plan  <span>💘</span></div>
+                
+                <button class="btn-playlist" id="btnPlaylist">🎵 playlist para ti 🎵</button>
+                <div class="mini-indicador">4/4  —  el último detalle</div>
+
+                <!-- REPRODUCTOR CON TUS CANCIONES (ENLACES CORREGIDOS) -->
+                <div id="reproductorBox" class="reproductor-oculto">
+                    <p>✨  sólo para ti  ✨</p>
+                    <div class="playlist">
+                        <!-- Canción 1: AMOR DE CINE -->
+                        <div class="playlist-item">
+                            <span class="cancion-numero">1</span>
+                            <span class="cancion-info">AMOR DE CINE</span>
+                            <audio controls preload="none">
+                                <source src="https://github.com/DavidcMorat/Audio-para-html/raw/refs/heads/main/AMOR%20DE%20CINE(MP3_160K).mp3" type="audio/mpeg">
+                                Tu navegador no soporta audio.
+                            </audio>
+                        </div>
+                        <!-- Canción 2: Jósean Log - Pruébame a Ti -->
+                        <div class="playlist-item">
+                            <span class="cancion-numero">2</span>
+                            <span class="cancion-info">Jósean Log - Pruébame a Ti</span>
+                            <audio controls preload="none">
+                                <source src="https://github.com/DavidcMorat/Audio-para-html/raw/refs/heads/main/J%C3%B3sean%20Log%20-%20Pru%C3%A9bame%20a%20Ti%20(video%20oficial)(MP3_160K).mp3" type="audio/mpeg">
+                            </audio>
+                        </div>
+                        <!-- Canción 3: Jósean Log - Si Hay Algo -->
+                        <div class="playlist-item">
+                            <span class="cancion-numero">3</span>
+                            <span class="cancion-info">Jósean Log - Si Hay Algo</span>
+                            <audio controls preload="none">
+                                <source src="https://github.com/DavidcMorat/Audio-para-html/raw/refs/heads/main/J%C3%B3sean%20Log%20-%20Si%20Hay%20Algo%20(video%20oficial)(MP3_160K).mp3" type="audio/mpeg">
+                            </audio>
+                        </div>
+                        <!-- Canción 4: TIMØ - Luz -->
+                        <div class="playlist-item">
+                            <span class="cancion-numero">4</span>
+                            <span class="cancion-info">TIMØ - Luz</span>
+                            <audio controls preload="none">
+                                <source src="https://github.com/DavidcMorat/Audio-para-html/raw/refs/heads/main/TIM%C3%98%20-%20Luz%20(Official%20Video)(MP3_160K).mp3" type="audio/mpeg">
+                            </audio>
+                        </div>
+                        <!-- Canción 5: Ya No Hay Verano - Depresión Sonora -->
+                        <div class="playlist-item">
+                            <span class="cancion-numero">5</span>
+                            <span class="cancion-info">Ya No Hay Verano - Depresión Sonora</span>
+                            <audio controls preload="none">
+                                <source src="https://github.com/DavidcMorat/Audio-para-html/raw/refs/heads/main/Ya%20No%20Hay%20Verano%20-%20Depresi%C3%B3n%20Sonora(MP3_160K).mp3" type="audio/mpeg">
+                            </audio>
+                        </div>
+                    </div>
+                    <p style="font-size: 1rem; color:#a55a8a;">🎧 con amor: David</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            const scene1 = document.getElementById('scene1');
+            const scene2 = document.getElementById('scene2');
+            const scene3 = document.getElementById('scene3');
+            const scene4 = document.getElementById('scene4');
+            const to2 = document.getElementById('toScene2');
+            const to3 = document.getElementById('toScene3');
+            const to4 = document.getElementById('toScene4');
+            const btnPlaylist = document.getElementById('btnPlaylist');
+            const reproductor = document.getElementById('reproductorBox');
+
+            function mostrarEscena(escena) {
+                [scene1, scene2, scene3, scene4].forEach(s => s.classList.remove('active'));
+                escena.classList.add('active');
+            }
+
+            to2.addEventListener('click', () => mostrarEscena(scene2));
+            to3.addEventListener('click', () => mostrarEscena(scene3));
+            to4.addEventListener('click', () => mostrarEscena(scene4));
+
+            btnPlaylist.addEventListener('click', () => {
+                reproductor.classList.add('mostrar');
+                setTimeout(() => {
+                    reproductor.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }, 150);
+            });
+        })();
+    </script>
+</body>
+</html>
